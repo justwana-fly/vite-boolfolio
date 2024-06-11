@@ -1,27 +1,37 @@
 <template>
   <div id="app">
-    <h1>Hello, Vue 3!</h1>
-    <i class="fas fa-home"></i> <!-- Font Awesome icon -->
+    <h1>Project List</h1>
+    <ul>
+      <li v-for="project in projects" :key="project.id">{{ project.name }}</li>
+    </ul>
   </div>
 </template>
 
 <script>
 export default {
-  name: 'App'
+  name: 'App',
+  data() {
+    return {
+      projects: []
+    };
+  },
+  mounted() {
+    this.fetchProjects();
+  },
+  methods: {
+    async fetchProjects() {
+      try {
+        const response = await this.$axios.get('http://127.0.0.1:8000/admin/projects');
+        this.projects = response.data;
+        console.log(this.projects);
+      } catch (error) {
+        console.error('Error fetching projects:', error);
+      }
+    }
+  }
 };
 </script>
 
 <style scoped>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
 
-.fas {
-  color: #42b983;
-}
 </style>
